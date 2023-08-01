@@ -7,59 +7,34 @@ using System.Threading.Tasks;
 
 namespace ElevatorApplication.Model
 {
-    public class Elevator
+    public class Elevator : MovableObject
     {
-        public int CurrentFloor { get; private set; }
-        public int MaxFloors { get; private set; }
-        public bool IsMoving { get; private set; }
-        public Direction CurrentDirection { get; private set; }
-        public int Capacity { get; private set; }
-        public int NumberOfPeopleInside { get; private set; }
+        public int NumPeopleInside { get; set; }
 
-        public Elevator(int maxFloors, int capacity)
+        public Elevator(int currentFloor)
         {
-            CurrentFloor = 1;
-            MaxFloors = maxFloors;
-            IsMoving = false;
-            CurrentDirection = Direction.None;
-            Capacity = capacity;
-            NumberOfPeopleInside = 0;
+            CurrentFloor = currentFloor;
+            Direction = Direction.Up;
         }
 
-        public void MoveToFloor(int targetFloor)
+        public override void MoveUp()
         {
-            if (targetFloor < 1 || targetFloor > MaxFloors)
-                throw new ArgumentException("Invalid floor number");
-
-            CurrentDirection = targetFloor > CurrentFloor ? Direction.Up : Direction.Down;
-
-            // Simulate the movement of the elevator (you can add delay here for realism)
-            IsMoving = true;
-            Console.WriteLine($"Elevator {CurrentFloor} moving {CurrentDirection} to floor {targetFloor}");
-            CurrentFloor = targetFloor;
-            IsMoving = false;
-            CurrentDirection = Direction.None;
+            CurrentFloor++;
         }
 
-        public bool CanAddPerson()
+        public override void MoveDown()
         {
-            return NumberOfPeopleInside < Capacity;
+            CurrentFloor--;
         }
 
-        public void AddPerson()
+        public void PickUpPassenger()
         {
-            if (CanAddPerson())
-            {
-                NumberOfPeopleInside++;
-            }
+            NumPeopleInside++;
         }
 
-        public void RemovePerson()
+        public void DropOffPassenger()
         {
-            if (NumberOfPeopleInside > 0)
-            {
-                NumberOfPeopleInside--;
-            }
+            NumPeopleInside--;
         }
     }
 }
